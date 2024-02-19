@@ -57,13 +57,14 @@ class Forma(disnake.ui.Modal):
         embed.add_field(name="> Опыт был?", value=f"```{exp}```")
         embed.add_field(name="> Запретки", value=f"```{zapretki}```")
         embed.add_field(name="> Сколько уделять", value=f"```{time_serv}```")
-        await channel.send(embed=embed, view=ViewForAdmin(interaction.author.id, self.bot, embed))
-        role = interaction.guild.get_role(RolesIds.AWAITING.value)
-        await interaction.author.add_roles(role)
         embed2 = disnake.Embed(color=Color.GRAY)
         embed2.title = "Ваша заявка подана!"
         embed2.description = f"{interaction.author.mention}, Ваша заявка на роль\n" \
                              f"**{self.arg}** была подана **успшено!**"
         embed2.set_footer(text="При рассмотрении вашей заявке вы будете оповещены")
         embed2.set_thumbnail(url=interaction.author.display_avatar)
-        await interaction.response.send_message(embed=embed2, ephemeral=True)
+        await interaction.response.defer(with_message=True, ephemeral=True)
+        await interaction.followup.send(embed=embed2, ephemeral=True)
+        await channel.send(embed=embed, view=ViewForAdmin(interaction.author.id, self.bot, embed))
+        role = interaction.guild.get_role(RolesIds.AWAITING.value)
+        await interaction.author.add_roles(role)
