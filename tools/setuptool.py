@@ -7,7 +7,7 @@ from configs.config import Config
 bot = commands.Bot(command_prefix = "!",
                    intents = disnake.Intents.all(),
                    help_command = None,
-                   test_guilds=[1208522036113317950, 1207663185675423754],
+                   test_guilds=[...],
                    command_sync_flags = commands.CommandSyncFlags.all(),
                    reload = True,
                    )
