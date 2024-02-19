@@ -18,7 +18,7 @@ class CancelButton(disnake.ui.Button):
         embed.set_thumbnail(url=user.display_avatar)
         await user.send(embed=embed)
         edited_embed = self.embed.copy()
-        edited_embed.set_footer(text=f"Рассматривает: {interaction.author.name}", icon_url=interaction.author.avatar_url)
+        edited_embed.set_footer(text=f"Рассматривает: {interaction.author.name}", icon_url=interaction.author.avatar)
         await interaction.response.edit_message(embed=edited_embed, view=None)
         role = interaction.guild.get_role(RolesIds.AWAITING.value)
         if role in user.roles:
