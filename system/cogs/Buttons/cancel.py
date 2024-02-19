@@ -11,18 +11,21 @@ class CancelButton(disnake.ui.Button):
 
     async def callback(self, interaction: disnake.MessageInteraction) -> None:
         user = await interaction.guild.fetch_member(self.user)
-        embed = disnake.Embed(color=Color.GRAY)
-        embed.title = "Вам отказано в заявке!"
-        embed.description = f"{user.mention}, Вам **отказали** в заявке!\n" \
-                             "попробуйте в **следующий** раз!"
-        embed.set_thumbnail(url=user.display_avatar)
-        await user.send(embed=embed)
+        embed = disnake.Embed(
+            color=Color.GRAY, title="Вам отказано в заявке!",
+            description=f"{user.mention}, Вам **отказали** в заявке!\n"
+                        "попробуйте в **следующий** раз!"
+        ).set_thumbnail(url=user.display_avatar)
+
+        try:
+            await user.send(embed=embed)
+        except disnake.Forbidden:
+            pass
+
         edited_embed = self.embed.copy()
         edited_embed.set_footer(text=f"Рассматривает: {interaction.author.name}", icon_url=interaction.author.avatar)
         await interaction.response.edit_message(embed=edited_embed, view=None)
         role = interaction.guild.get_role(RolesIds.AWAITING.value)
         if role in user.roles:
             await user.remove_roles(role)
-            await interaction.followup.send("Пользователь был оповещен об отказе в заявке.", ephemeral=True)
-        else:
-            return interaction.followup.send
+        await interaction.followup.send("Пользователь оповещен об отказе в заявке.", ephemeral=True)
